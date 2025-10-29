@@ -65,7 +65,7 @@ Smart Uni-Verse 2.0 is a full-stack, futuristic digital university ecosystem bui
 * **APIs & Libraries:**
     * **OpenAI API:** For all AI features (via PHP cURL).
     * **FPDF:** For server-side PDF receipt generation.
-    * **smalot/pdfparser (Composer):** Required for extracting text from research PDFs.
+    * **smalot/pdfparser (Composer):** Required for extracting text from research PDFs
 
 ---
 
