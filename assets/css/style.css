@@ -1,0 +1,66 @@
+/* Import a Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- Glassmorphism Effect --- */
+.glassmorphism {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* Dark mode glassmorphism */
+.dark .glassmorphism {
+    background: rgba(41, 41, 51, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* --- Neon Accents --- */
+.neon-text {
+    text-shadow: 0 0 5px #fff,
+                 0 0 10px #fff,
+                 0 0 20px #007bff,
+                 0 0 30px #007bff,
+                 0 0 40px #007bff;
+}
+
+.neon-button {
+    box-shadow: 0 0 10px #007bff, 0 0 20px #007bff;
+}
+
+/* --- Hero Section Cosmic/DNA Background --- */
+/* This is a simple animated gradient. For a true DNA parallax,
+   you would use GSAP and SVG paths. */
+#parallax-bg {
+    /* For a more advanced effect, use a library like particles.js
+       or a custom GSAP canvas animation. */
+    background: linear-gradient(270deg, #0f0c29, #302b63, #24243e, #0f0c29);
+    background-size: 600% 600%;
+    animation: cosmicFlow 30s ease infinite;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+@keyframes cosmicFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Smooth Page Transitions (Optional) --- */
+body {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
