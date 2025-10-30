@@ -1,5 +1,14 @@
 <?php
-// This is contact.php
+// This is contact.php (UPGRADED WITH PHPMailer)
+
+// Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// Load Composer's autoloader
+require 'vendor/autoload.php';
+
 include('includes/header.php');
 
 $errors = [];
@@ -7,43 +16,49 @@ $success = '';
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 1. Sanitize and retrieve data
     $full_name = filter_var(trim($_POST['full_name']), FILTER_SANITIZE_STRING);
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $subject = filter_var(trim($_POST['subject']), FILTER_SANITIZE_STRING);
     $message = filter_var(trim($_POST['message']), FILTER_SANITIZE_STRING);
 
-    // 2. Validation
-    if (empty($full_name)) {
-        $errors[] = "Full name is required.";
-    }
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "A valid email is required.";
-    }
-    if (empty($subject)) {
-        $errors[] = "Subject is required.";
-    }
-    if (empty($message)) {
-        $errors[] = "Message cannot be empty.";
+    // Validation
+    if (empty($full_name) || !filter_var($email, FILTER_VALIDATE_EMAIL) || empty($subject) || empty($message)) {
+        $errors[] = "All fields are required and must be valid.";
     }
 
-    // 3. Send email
     if (empty($errors)) {
-        $to = "admin@smart-uni-verse.com"; // !! CHANGE THIS !!
-        $headers = "From: " . $full_name . " <" . $email . ">" . "\r\n";
-        $headers .= "Reply-To: " . $email . "\r\n";
-        $email_body = "You have received a new message from your website contact form.\n\n";
-        $email_body .= "Name: $full_name\n";
-        $email_body .= "Email: $email\n";
-        $email_body .= "Subject: $subject\n";
-        $email_body .= "Message:\n$message\n";
+        // Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
 
-        if (mail($to, $subject, $email_body, $headers)) {
-            $success = "Your message has been sent successfully. We will get back to you shortly!";
-            // Clear form fields
-            $_POST = [];
-        } else {
-            $errors[] = "There was a problem sending your message. Please try again later.";
+        try {
+            // --- 1. Server Settings (PRE-CONFIGURED) ---
+            // $mail->SMTPDebug = SMTP::DEBUG_SERVER; // Uncomment for detailed error logs
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'otahacharles@gmail.com'; // Your Gmail address
+            $mail->Password   = 'clzd jipz sspl himx'; // Your App Password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            // --- 2. Recipients ---
+            $mail->setFrom('otahacharles@gmail.com', 'Smart Uni-Verse Contact Form');
+            $mail->addAddress('otahacharles@gmail.com', 'Smart Uni-Verse Admin'); // Sending to yourself for testing
+            $mail->addReplyTo($email, $full_name); // Set reply-to to the user's email
+
+            // --- 3. Content ---
+            $mail->isHTML(false); // Set email format to plain text
+            $mail->Subject = 'New Contact Form Message: ' . $subject;
+            $mail->Body    = "You have received a new message from your website contact form.\n\n" .
+                             "Name: $full_name\n" .
+                             "Email: $email\n\n" .
+                             "Message:\n$message";
+
+            $mail->send();
+            $success = 'Your message has been sent successfully. We will get back to you shortly!';
+            $_POST = []; // Clear the form
+        } catch (Exception $e) {
+            $errors[] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
 }
@@ -97,11 +112,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </form>
             
-            <blockquote>
-                <p class="mt-6 p-4 bg-yellow-500/20 text-yellow-300 rounded-lg text-sm">
-                    <strong>Note for XAMPP users:</strong> PHP's `mail()` function will not work on a default XAMPP setup. You must configure `php.ini` and `sendmail.ini` to use an external SMTP server (like Gmail). For production, using a library like **PHPMailer** is strongly recommended.
-                </p>
-            </blockquote>
         </div>
         
         <div data-aos="fade-left" data-aos-delay="100">

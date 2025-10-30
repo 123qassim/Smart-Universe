@@ -47,11 +47,8 @@
             <a href="ai_assistant.php" class="hover:text-blue-500">AI Tutor</a>
             <a href="research.php" class="hover:text-blue-500">Research</a>
             <a href="events.php" class="hover:text-blue-500">Events</a>
-            
             <a href="achievements.php" class="hover:text-blue-500">Achievements</a>
-            
             <a href="community.php" class="hover:text-blue-500">Community</a>
-            
             <a href="contact.php" class="hover:text-blue-500">Contact</a>
             
             <?php if (isLoggedIn()): ?>

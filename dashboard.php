@@ -105,11 +105,13 @@ try {
         <div class="space-y-8">
             
             <?php
-                // Fetch user's points and 3 recent badges
+                // Fetch user's points
                 $points_stmt = $pdo->prepare("SELECT points FROM users WHERE user_id = ?");
                 $points_stmt->execute([$user_id]);
                 $user_points = $points_stmt->fetchColumn();
                 
+                // Fetch 3 recent badges
+                // This is the query from line 121
                 $badges_stmt = $pdo->prepare("
                     SELECT a.icon, a.name 
                     FROM user_achievements ua
