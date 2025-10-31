@@ -1,5 +1,12 @@
 {
+    "name": "your-username/smart-uni-verse",
+    "description": "An AI-powered digital university ecosystem.",
+    "license": "MIT",
     "require": {
-        "phpmailer/phpmailer": "^7.0"
+        "phpmailer/phpmailer": "^7.0",
+        "smalot/pdfparser": "^2.10"
+    },
+    "autoload": {
+        "psr-4": {}
     }
 }
